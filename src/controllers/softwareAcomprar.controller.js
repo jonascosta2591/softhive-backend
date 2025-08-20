@@ -12,7 +12,7 @@ class SoftwareAcomprar {
         const allSoftwares = await selectAllSoftwares()
 
         const newAllSoftwares = allSoftwares.map((soft) => {
-            return {id: soft.idsoftwares_para_comprar, name: soft.nome_software, image: soft.imagem, price: soft.price, category: soft.category, description: soft.description}
+            return {id: soft.idsoftwares_para_comprar, name: soft.nome_software, image: soft.imagem, price: parseFloat(soft.price), category: soft.category, description: soft.description}
         })
         
         return this.res.status(200).json(newAllSoftwares);
