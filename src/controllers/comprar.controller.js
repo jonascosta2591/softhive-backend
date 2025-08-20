@@ -2,7 +2,7 @@ import buysoft from "../querys/comprar_software.query.js";
 import insertTransaction from "../querys/insertTransaction.js";
 import transactionByCPF from './../querys/transactionsByCpf.query.js'
 import { criarCliente } from './../services/customer.service.js'
-import { criarCobrancaPix } from './../services/payment.service.js'
+import { criarCobrancaPix, getPixTransactionData } from './../services/payment.service.js'
 import dayjs from 'dayjs';
 
 class ComprarSoftware {
@@ -47,8 +47,10 @@ class ComprarSoftware {
 
               //cria nova transaction na tabela transactions 
               await insertTransaction(cpf, customeId, totalPrice, pixTransactionData.id, nome, idUser, 'PENDING')
+
+              let qrcodePixData = await getPixTransactionData(pixTransactionData.id)
               return this.res.status(200).json({total: totalPrice, data: [
-                pixTransactionData
+                qrcodePixData
               ]});
               /**
                * data: [{
@@ -77,8 +79,10 @@ class ComprarSoftware {
 
               await insertTransaction(usedata.cpfCnpj, customerId, totalPrice, pixTransactionData.id, usedata.name, idUser, 'PENDING')
 
+              let qrcodePixData = await getPixTransactionData(pixTransactionData.id)
+
               return this.res.status(200).json({total: totalPrice, data: [
-                pixTransactionData
+                qrcodePixData
               ]});
               /**
                * data: [{

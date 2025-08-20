@@ -7,3 +7,8 @@ export async function criarCobrancaPix(data) {
   });
   return response.data;
 }
+
+export async function getPixTransactionData(paymentId) {
+  const response = await asaasApi.get(`/payments/${paymentId}/pixQrCode`);
+  return response.data;
+}
