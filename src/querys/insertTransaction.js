@@ -1,5 +1,6 @@
 import mysql from 'mysql2/promise';
 import dbConfig from './../database/connect.js'
+import dayjs from 'dayjs'
 
 let maxAttempts = 10;
 let attempts = 0
@@ -9,9 +10,10 @@ async function insertTransaction(cpf, id_customer, price, transaction_id, name, 
   let connection;
   attempts = attempts + 1
   try {
+    const data_de_hoje = dayjs().format();
     connection = await mysql.createConnection(dbConfig);
     // 2. Executa a query simples de SELECT
-    const [rows, fields] = await connection.execute(`INSERT INTO transactions (cpf, id_customer, price, transaction_id, name, user_id, status) VALUES(?, ?, ?, ?, ?, ?, ?)`, [cpf, id_customer, price, transaction_id, name, user_id, statusTransaction]);
+    const [rows, fields] = await connection.execute(`INSERT INTO transactions (cpf, id_customer, price, transaction_id, name, user_id, status, data) VALUES(?, ?, ?, ?, ?, ?, ?, ?)`, [cpf, id_customer, price, transaction_id, name, user_id, statusTransaction, data_de_hoje]);
     // 3. Exibe os resultados
     return rows;
 

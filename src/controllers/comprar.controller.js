@@ -97,6 +97,7 @@ class ComprarSoftware {
             
           // await criarCliente(clientData)
         }
+        
         return this.res.status(200).json({total: totalPrice});
     }catch(err){
         console.log(err)
