@@ -4,6 +4,9 @@ import softwaresAcomprar from './src/routes/softwaresAcomprar.router.js'
 import ComprarSoftware from "./src/routes/comprar.router.js";
 import Login from './src/routes/login.router.js'
 import Registrar from './src/routes/register.router.js'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const app = express();
 
