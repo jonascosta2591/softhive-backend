@@ -49,7 +49,7 @@ class ComprarSoftware {
               await insertTransaction(cpf, customeId, totalPrice, pixTransactionData.id, nome, idUser, 'PENDING')
 
               let qrcodePixData = await getPixTransactionData(pixTransactionData.id)
-              return this.res.status(200).json({total: totalPrice, data: [
+               return this.res.status(200).json({total: totalPrice, idTransaction: pixTransactionData.id, data: [
                 qrcodePixData
               ]});
               /**
@@ -81,7 +81,7 @@ class ComprarSoftware {
 
               let qrcodePixData = await getPixTransactionData(pixTransactionData.id)
 
-              return this.res.status(200).json({total: totalPrice, data: [
+              return this.res.status(200).json({total: totalPrice, idTransaction: pixTransactionData.id, data: [
                 qrcodePixData
               ]});
               /**
