@@ -40,7 +40,7 @@ async function comprarSoftware(ids) {
       total += parseFloat(onePrice)
     }
     // 3. Exibe os resultados
-    return total;
+    return total.toFixed(2);
 
   } catch (err) {
     console.log(err)
