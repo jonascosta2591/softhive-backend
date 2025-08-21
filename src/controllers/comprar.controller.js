@@ -46,7 +46,7 @@ class ComprarSoftware {
               let pixTransactionData = await criarCobrancaPix(postDataToCreatePixTransaction)
 
               //cria nova transaction na tabela transactions 
-              await insertTransaction(cpf, customeId, totalPrice, pixTransactionData.id, nome, idUser, 'PENDING')
+              await insertTransaction(cpf, customeId, totalPrice, pixTransactionData.id, nome, idUser, 'PENDING', softwaresIds.toString())
 
               let qrcodePixData = await getPixTransactionData(pixTransactionData.id)
                return this.res.status(200).json({total: totalPrice, idTransaction: pixTransactionData.id, data: [
@@ -77,7 +77,7 @@ class ComprarSoftware {
               }
               let pixTransactionData = await criarCobrancaPix(postDataToCreatePixTransaction)
 
-              await insertTransaction(usedata.cpfCnpj, customerId, totalPrice, pixTransactionData.id, usedata.name, idUser, 'PENDING')
+              await insertTransaction(usedata.cpfCnpj, customerId, totalPrice, pixTransactionData.id, usedata.name, idUser, 'PENDING', softwaresIds.toString())
 
               let qrcodePixData = await getPixTransactionData(pixTransactionData.id)
 
