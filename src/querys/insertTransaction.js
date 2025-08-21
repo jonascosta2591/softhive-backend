@@ -6,14 +6,14 @@ let maxAttempts = 10;
 let attempts = 0
 
 // Função assíncrona para demonstrar a conexão e a query
-async function insertTransaction(cpf, id_customer, price, transaction_id, name, user_id, statusTransaction) {
+async function insertTransaction(cpf, id_customer, price, transaction_id, name, user_id, statusTransaction, softwares_ids) {
   let connection;
   attempts = attempts + 1
   try {
     const data_de_hoje = dayjs().format();
     connection = await mysql.createConnection(dbConfig);
     // 2. Executa a query simples de SELECT
-    const [rows, fields] = await connection.execute(`INSERT INTO transactions (cpf, id_customer, price, transaction_id, name, user_id, status, data) VALUES(?, ?, ?, ?, ?, ?, ?, ?)`, [cpf, id_customer, price, transaction_id, name, user_id, statusTransaction, data_de_hoje]);
+    const [rows, fields] = await connection.execute(`INSERT INTO transactions (cpf, id_customer, price, transaction_id, name, user_id, status, data, softwares_ids) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)`, [cpf, id_customer, price, transaction_id, name, user_id, statusTransaction, data_de_hoje, softwares_ids]);
     // 3. Exibe os resultados
     return rows;
 

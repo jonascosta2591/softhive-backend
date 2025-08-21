@@ -14,7 +14,6 @@ class ComprarSoftware {
   async comprar_soft() {
     try{
         let { softwaresIds, paymentMethod } = this.req.body;
-        
         const totalPrice = await buysoft(softwaresIds)
         const idUser = this.req.user.id
         
