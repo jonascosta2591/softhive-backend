@@ -1,4 +1,4 @@
-import { consultarPagamento } from "../services/payment.service";
+import { consultarPagamento } from "../services/payment.service.js";
 
 const JWT_SECRET = "jonas2022#A";
 

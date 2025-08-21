@@ -12,3 +12,8 @@ export async function getPixTransactionData(paymentId) {
   const response = await asaasApi.get(`/payments/${paymentId}/pixQrCode`);
   return response.data;
 }
+
+export async function consultarPagamento(paymentId) {
+  const response = await asaasApi.get(`/payments/${paymentId}`);
+  return response.data;
+}
