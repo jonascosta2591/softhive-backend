@@ -1,10 +1,10 @@
 import express from "express";
-import login from '../controllers/login.controller.js'
+import consultarPagamento from '../controllers/consult-payment.controller.js'
 
 const router = express.Router();
 
-router.post("/login", (req, res) => {
-  return new login(req, res).logar();
+router.post("/payment", (req, res) => {
+  return new consultarPagamento(req, res).consult();
 });
 
 export default router;
