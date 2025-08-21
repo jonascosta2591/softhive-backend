@@ -16,17 +16,15 @@ class consultPayment {
 
       const response = await consultarPagamento(paymentId)
 
-      const [data] = response
-
-      if(data.status === 'RECEIVED' || data.status === 'CONFIRMED'){
+      if(response.status === 'RECEIVED' || response.status === 'CONFIRMED'){
         //Adiciona os softwares a tabela "softwares pagos"
       }
 
       return this.res.status(200).json({
-        status: data.status,
-        value: data.value,
-        dueDate: data.dueDate,
-        billingType: data.billingType
+        status: response.status,
+        value: response.value,
+        dueDate: response.dueDate,
+        billingType: response.billingType
       });
 
     } catch (err) {
