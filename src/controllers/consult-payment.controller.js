@@ -21,8 +21,9 @@ class consultPayment {
       const idUser = this.req.user.id
 
       const response = await consultarPagamento(paymentId)
+     
       //response.status === 'RECEIVED' || response.status === 'CONFIRMED'
-      if(true){
+      if(response.status === 'RECEIVED' || response.status === 'CONFIRMED'){
         //Adiciona os softwares a tabela "softwares pagos"
         let softwaresComprados = (await consultaProdutoComprado(paymentId)).length
         await updateTransactionStatus('PAID', paymentId) //atualiza status do pagamento no transactions para paid

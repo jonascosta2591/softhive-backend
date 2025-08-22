@@ -8,6 +8,10 @@ const asaasApi = axios.create({
   headers: {
     "Content-Type": "application/json",
     "access_token": API_PRIVATE_KEY
+  },
+  validateStatus: function (status) {
+    // Retorna true para qualquer status, para não lançar erro
+    return true;
   }
 });
 
