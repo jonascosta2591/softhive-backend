@@ -1,57 +1,61 @@
 import mysql from 'mysql2/promise';
-import dbConfig from './../database/connect.js'
+import dbConfig from './../database/connect.js';
 
-let maxAttempts = 10;
-let attempts = 0
+async function selectSoftware(ids, connection) {
+  const prices = [];
 
+  for (let id of ids) {
+    try {
+      const [rows] = await connection.execute(
+        `SELECT * FROM softwares_para_comprar WHERE idsoftwares_para_comprar = ?`,
+        [id]
+      );
 
-async function selectSoftware(ids, connection){
-  let prices = []
-
-  for(let id of ids){
-    try{
-      const [rows, fields] = await connection.execute(`SELECT * FROM softwares_para_comprar WHERE idsoftwares_para_comprar = ?`, [id]);
-
-      rows.map((softwares) => prices.push(softwares.price))
-    }catch(err){
-      console.error(err)
-      await connection.rollback()
-    } 
+      rows.forEach(software => prices.push(parseFloat(software.price)));
+    } catch (err) {
+      console.error(`Erro ao selecionar software ID ${id}:`, err.message);
+      throw err; // lança para o retry na função principal
+    }
   }
-  if (connection) {
-    connection.end();
 
-    return prices
-  }
+  return prices;
 }
 
-// Função assíncrona para demonstrar a conexão e a query
-async function comprarSoftware(ids) {
-  let connection;
-  attempts = attempts + 1
-  try {
-    
-    connection = await mysql.createConnection(dbConfig);
-    // 2. Executa a query simples de SELECT
-    let prices = await selectSoftware(ids, connection)
-    
-    let total = 0
-    for(let onePrice of prices){
-      total += parseFloat(onePrice)
-    }
-    // 3. Exibe os resultados
-    return total.toFixed(2);
+async function comprarSoftware(ids, maxAttempts = 10) {
+  let attempts = 0;
 
-  } catch (err) {
-    console.log(err)
-    await connection.rollback()
-    // Lida com erros de conexão ou de query
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    if (attempts === maxAttempts) {
-        console.error('Limite de tentativas atingido. A operação falhou permanentemente.');
+  while (attempts < maxAttempts) {
+    attempts++;
+    let connection;
+
+    try {
+      connection = await mysql.createConnection(dbConfig);
+      await connection.beginTransaction();
+
+      const prices = await selectSoftware(ids, connection);
+
+      const total = prices.reduce((sum, price) => sum + price, 0);
+
+      await connection.commit(); // confirma a transação
+      await connection.end();
+      return total.toFixed(2);
+
+    } catch (err) {
+      console.error(`Tentativa ${attempts} falhou:`, err.message);
+
+      if (connection) {
+        try { await connection.rollback(); } catch (_) {}
+        try { await connection.end(); } catch (_) {}
+      }
+
+      if (attempts === maxAttempts) {
         throw new Error('Falha na transação após múltiplas tentativas.');
+      }
+
+      // espera 1 segundo antes de tentar novamente
+      await new Promise(resolve => setTimeout(resolve, 1000));
     }
-  } 
+  }
 }
 
-export default comprarSoftware
+export default comprarSoftware;

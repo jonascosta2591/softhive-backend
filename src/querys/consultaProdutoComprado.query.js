@@ -1,7 +1,7 @@
 import mysql from 'mysql2/promise';
 import dbConfig from './../database/connect.js';
 
-async function transactionByCPF(cpf, maxAttempts = 10) {
+async function consultaProdutoComprado(transactionId, maxAttempts = 10) {
   let attempts = 0;
 
   while (attempts < maxAttempts) {
@@ -10,14 +10,14 @@ async function transactionByCPF(cpf, maxAttempts = 10) {
 
     try {
       connection = await mysql.createConnection(dbConfig);
-      await connection.beginTransaction();
+      await connection.beginTransaction(); // opcional para SELECT, mas mantido
 
       const [rows] = await connection.execute(
-        `SELECT * FROM transactions WHERE cpf = ?`,
-        [cpf]
+        `SELECT * FROM softwares_pagos WHERE transactionId = ?`,
+        [transactionId]
       );
 
-      await connection.commit(); // finaliza a transação
+      await connection.commit(); // opcional para SELECT, mas bom para consistência
       await connection.end();
       return rows;
 
@@ -39,4 +39,4 @@ async function transactionByCPF(cpf, maxAttempts = 10) {
   }
 }
 
-export default transactionByCPF;
+export default consultaProdutoComprado;

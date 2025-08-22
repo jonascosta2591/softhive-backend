@@ -1,29 +1,27 @@
 import mysql from 'mysql2/promise';
-import dbConfig from './../database/connect.js';
+import dbConfig from '../database/connect.js';
 
-async function transactionByCPF(cpf, maxAttempts = 10) {
+async function updateTransactionStatus(statusTransaction, transaction_id, maxAttempts = 10) {
   let attempts = 0;
 
   while (attempts < maxAttempts) {
     attempts++;
     let connection;
-
     try {
       connection = await mysql.createConnection(dbConfig);
       await connection.beginTransaction();
 
       const [rows] = await connection.execute(
-        `SELECT * FROM transactions WHERE cpf = ?`,
-        [cpf]
+        `UPDATE transactions SET status = ? WHERE transaction_id = ?`,
+        [statusTransaction, transaction_id]
       );
 
-      await connection.commit(); // finaliza a transação
+      await connection.commit(); // salva a transação
       await connection.end();
       return rows;
 
     } catch (err) {
-      console.error(`Tentativa ${attempts} falhou:`, err.message);
-
+      console.error(`Erro na tentativa ${attempts}:`, err.message);
       if (connection) {
         try { await connection.rollback(); } catch (_) {}
         try { await connection.end(); } catch (_) {}
@@ -39,4 +37,4 @@ async function transactionByCPF(cpf, maxAttempts = 10) {
   }
 }
 
-export default transactionByCPF;
+export default updateTransactionStatus;
