@@ -33,7 +33,7 @@ async function add_softwareComprado(usuario_id, software_id, liberado, data_comp
         throw new Error('Falha na transação após múltiplas tentativas.');
       }
 
-      await new Promise(resolve => setTimeout(resolve, 1000)); // espera antes de tentar de novo
+      await new Promise(resolve => setTimeout(resolve, 5000)); // espera antes de tentar de novo
     }
   }
 }

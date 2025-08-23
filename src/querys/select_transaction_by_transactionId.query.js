@@ -34,7 +34,7 @@ async function selectTransactionByTransactionId(transactionId, maxAttempts = 10)
       }
 
       // espera 1 segundo antes de tentar novamente
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 5000));
     }
   }
 }
